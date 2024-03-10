@@ -1,0 +1,4 @@
+git venv
+.idea
+*.DS_Store
+src/bot_token.py
