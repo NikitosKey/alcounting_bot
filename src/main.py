@@ -2,7 +2,9 @@
 # пока тут просто шаблон
 
 import logging
-from bot_token import token  # if highlighted see requirements in README.md
+import os
+bot_token = os.getenv('BOT_TOKEN')
+# from bot_token import token  # if highlighted see requirements in README.md for use in local machine.
 from modules.general import echo, start, help_command
 
 from telegram import ForceReply, Update
@@ -21,7 +23,7 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
-    application = Application.builder().token(token).build()
+    application = Application.builder().token(bot_token).build()
     
 
     # on different commands - answer in Telegram
