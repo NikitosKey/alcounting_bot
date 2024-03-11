@@ -1,8 +1,8 @@
-SEE README.md REQURIMENTS BEFORE LAUNCH!!!
+SEE README.md REQUIREMENTS BEFORE LAUNCH!!!
 
 To make executable 
 
-on Mac:
+On Mac:
 chmod 755 macos.sh
 
 On Linux
