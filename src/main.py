@@ -3,8 +3,7 @@
 
 import logging
 import os
-bot_token = os.getenv('BOT_TOKEN')
-# from bot_token import token  # if highlighted see requirements in README.md for use in local machine.
+bot_token = os.getenv('BOT_TOKEN') # set BOT_TOKEN in your env.
 from modules.general import echo, start, help_command
 
 from telegram import ForceReply, Update
