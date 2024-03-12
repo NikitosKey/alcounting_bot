@@ -99,11 +99,7 @@ in progress
 
 - python-telegram-bot v21.0.1 installed from pip
 - python 3.8 - 3.12
-- telegram bot token in src/bot_token.py
-
-``` python
-token = "YOUR TOKEN"
-```
+- BOT_TOKEN a variable in your environment with the value of the Telegram bot API token
 
 ### Instructions
 
