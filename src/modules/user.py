@@ -1,6 +1,10 @@
+import datetime
+
+
+
 class User:
 
-    def __init__(self, user_name, user_id, user_type):
+    def __init__(self, user_name, user_id, user_type) -> None:
         self.user_name = user_name
         self.user_id = user_id
         self.user_type = user_type
@@ -14,14 +18,22 @@ class User:
     def get_user_id(self) -> str:
         return self.user_id
 
-    def get_user_type(self):
+    def get_user_type(self) -> str:
         return self.user_type
 
-    def set_user_name(self, name):
+    def set_user_name(self, name) -> None:
         self.user_name = name
 
-    def set_user_id(self, user_id):
+    def set_user_id(self, user_id) -> None:
         self.user_id = user_id
 
-    def set_user_type(self, user_type):
+    def set_user_type(self, user_type) -> None:
         self.user_type = user_type
+
+
+
+
+
+
+
+
