@@ -4,3 +4,4 @@ venv
 src/bot_token.py
 qodana.yaml
 data/*
+.github/workflows/bot_launch.yml
