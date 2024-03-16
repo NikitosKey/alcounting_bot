@@ -1,39 +1,33 @@
-import datetime
-
-
-
 class User:
 
-    def __init__(self, user_name, user_id, user_type) -> None:
-        self.user_name = user_name
-        self.user_id = user_id
-        self.user_type = user_type
+    def __init__(self, id, name, type) -> None:
+        self.id = id
+        self.name = name
+        self.type = type
 
-        if self.user_type not in ['barmen', 'admin', 'customer']:
+        if self.type not in ['barmen', 'admin', 'customer']:
             raise ValueError("Invalid user type")
 
+
     def get_user_name(self) -> str:
-        return self.user_name
+        return self.name
+
 
     def get_user_id(self) -> str:
-        return self.user_id
+        return self.id
+
 
     def get_user_type(self) -> str:
-        return self.user_type
+        return self.type
+
 
     def set_user_name(self, name) -> None:
-        self.user_name = name
+        self.name = name
+
 
     def set_user_id(self, user_id) -> None:
-        self.user_id = user_id
+        self.id = user_id
+
 
     def set_user_type(self, user_type) -> None:
-        self.user_type = user_type
-
-
-
-
-
-
-
-
+        self.type = user_type
