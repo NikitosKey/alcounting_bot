@@ -3,8 +3,11 @@
 import os
 import logging
 
-from modules.customer import button_tap, menu
-from modules.general import echo, start, help_command
+from modules.customer import Customer
+from modules.barman import Barman
+from modules.admin import Admin
+
+from modules.general import echo, start, help_command, menu
 
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
@@ -23,7 +26,6 @@ def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(os.getenv('BOT_TOKEN')).build()
-    
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
@@ -31,9 +33,11 @@ def main() -> None:
     application.add_handler(CommandHandler("menu", menu))
 
     # Register handler for inline buttons
-    application.add_handler(CallbackQueryHandler(button_tap))
+    application.add_handler(CallbackQueryHandler(Customer.second_page))
+    application.add_handler(CallbackQueryHandler(Barman.second_page))
+    application.add_handler(CallbackQueryHandler(Admin.second_page))
 
-    # on non command i.e message - echo the message on Telegram
+    # on non command i.e. message - echo the message on Telegram
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
     # Run the bot until the user presses Ctrl-C

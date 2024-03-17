@@ -8,8 +8,9 @@ from telegram.constants import ParseMode
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackContext
 
 # Pre-assign menu text
-FIRST_MENU = "<b>Menu 1</b>\n\nA beautiful menu with a shiny inline button."
-SECOND_MENU = "<b>Menu 2</b>\n\nA better menu with even more shiny inline buttons."
+FIRST_MENU_MARKUP = None
+FIRST_MENU = "<b>Меню заказчика</b>\n\nХуй"
+SECOND_MENU = "<b>Menu 2</b>\n\nЗалупа"
 
 # Pre-assign button text
 NEXT_BUTTON = "Next"
@@ -26,42 +27,45 @@ SECOND_MENU_MARKUP = InlineKeyboardMarkup([
 ])
 
 
-async def menu(update: Update, context: CallbackContext) -> None:
-    """
-    This handler sends a menu with the inline buttons we pre-assigned above
-    """
-    logging.getLogger(__name__).info(f'{update.message.from_user.id} use {update.message.text}')
+class Customer:
+    def __init__(self):
+        pass
 
-    await context.bot.send_message(
-        update.message.from_user.id,
-        FIRST_MENU,
-        parse_mode=ParseMode.HTML,
-        reply_markup=FIRST_MENU_MARKUP
-    )
+    async def home_page(update: Update, context: CallbackContext) -> None:
+        """
+        This handler sends a menu with the inline buttons we pre-assigned above
+        """
+        # logging.getLogger(__name__).info(f'{update.message.from_user.id} use {update.message.text}')
 
+        await context.bot.send_message(
+            update.message.from_user.id,
+            FIRST_MENU,
+            parse_mode=ParseMode.HTML,
+            reply_markup=FIRST_MENU_MARKUP
+        )
 
-async def button_tap(update: Update, context: CallbackContext) -> None:
-    """
-    This handler processes the inline buttons on the menu
-    """
+    async def second_page(update: Update, context: CallbackContext) -> None:
+        """
+        This handler processes the inline buttons on the menu
+        """
 
-    data = update.callback_query.data
-    text = ''
-    markup = None
+        data = update.callback_query.data
+        text = ''
+        markup = None
 
-    if data == NEXT_BUTTON:
-        text = SECOND_MENU
-        markup = SECOND_MENU_MARKUP
-    elif data == BACK_BUTTON:
-        text = FIRST_MENU
-        markup = FIRST_MENU_MARKUP
+        if data == NEXT_BUTTON:
+            text = SECOND_MENU
+            markup = SECOND_MENU_MARKUP
+        elif data == BACK_BUTTON:
+            text = FIRST_MENU
+            markup = FIRST_MENU_MARKUP
 
-    # Close the query to end the client-side loading animation
-    await update.callback_query.answer()
+        # Close the query to end the client-side loading animation
+        await update.callback_query.answer()
 
-    # Update message content with corresponding menu section
-    await update.callback_query.edit_message_text(
-        text,
-        ParseMode.HTML,
-        reply_markup=markup
-    )
+        # Update message content with corresponding menu section
+        await update.callback_query.edit_message_text(
+            text,
+            ParseMode.HTML,
+            reply_markup=markup
+        )
