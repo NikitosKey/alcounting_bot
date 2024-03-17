@@ -1,12 +1,12 @@
 class Product:
 
-    def __init__(self, tag, name, photo, description, price, composition) -> None:
-        self.tag = tag
+    def __init__(self, name, description, price) -> None:
+        # self.tag = tag
         self.name = name
-        self.photo = photo
+        # self.photo = photo
         self.description = description
         self.price = price
-        self.composition = composition
+        # self.composition = composition
 
     def get_name(self) -> str:
         return self.name

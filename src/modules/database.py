@@ -1,11 +1,11 @@
 import sqlite3
 from typing import List, Any
 
-from user import User
-from product import Product
-from order import Order
+from modules.user import User
+from modules.product import Product
+from modules.order import Order
 
-database_path = '../../data/database.db'
+database_path = 'data/database.db'
 
 
 class Database:
@@ -49,17 +49,17 @@ class Database:
         conn.commit()
         conn.close()
 
-    def insert_order(self, date, product, customer_id, barman_id, status) -> None:
+    def insert_order(self, order: Order) -> None:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute("""
             INSERT OR IGNORE INTO orders (date, product, customer_id, barman_id, status) 
             VALUES (?, ?, ?, ?, ?, ?)""",
-                    (date, product, customer_id, barman_id, status))
+                    (order.date, order.product, order.customer_id, order.barman_id, order.status))
         conn.commit()
         conn.close()
 
-    def insert_product(self, product) -> None:
+    def insert_product(self, product: Product) -> None:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute("""
@@ -70,7 +70,7 @@ class Database:
         conn.commit()
         conn.close()
 
-    def insert_user(self, user) -> None:
+    def insert_user(self, user: User) -> None:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute("""
@@ -80,38 +80,91 @@ class Database:
         conn.commit()
         conn.close()
 
-    def delete_order(self, order) -> None:
+    def delete_order(self, order: Order) -> None:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute('DELETE FROM Orders WHERE date = ?', (order.date,))
         conn.commit()
         conn.close()
 
-    def delete_user(self, user) -> None:
+    def delete_user(self, user: User) -> None:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute('DELETE FROM Users WHERE id = ?', (user.id,))
         conn.commit()
         conn.close()
 
-    def delete_product(self, product) -> None:
+    def delete_product(self, product: Product) -> None:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute('DELETE FROM Products WHERE name = ?', (product.name,))
         conn.commit()
         conn.close()
 
-
-""" def get_products(self) -> list | Product:
+    def get_all_products(self) -> List[Product]:
+        # Получение списка списков из бд
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Products')
         rows: list = cur.fetchall()
         conn.close()
-        return rows""" # Пока не работает, как считывать данные в объект, вопрос хороший, походу там надо повеселиться)
+        # Конвертирование в список Products
+        result: list[Product] = []
+        for row in rows:
+            result.append(Product(row[0], row[1], row[2]))
 
-""" def get_product_by_name(self, product) -> Product:
+        return result
+
+    def get_all_users(self) -> List[User]:
+        # Получение списка списков из бд
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
-        cur.execute('SELECT * FROM Products WHERE name = ?', (product.name,))
-        return"""  # Это пока не надо
+        cur.execute('SELECT * FROM Users')
+        rows: list = cur.fetchall()
+        conn.close()
+        # Конвертирование в список Products
+        result: list[User] = []
+        for row in rows:
+            result.append(User(row[0], row[1], row[2]))
+
+        return result
+
+    def get_all_orders(self) -> List[Order]:
+        # Получение списка списков из бд
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM Orders')
+        rows: list = cur.fetchall()
+        conn.close()
+        # Конвертирование в список Products
+        result: list[Order] = []
+        for row in rows:
+            result.append(Order(row[0], row[1], row[2], row[3], row[4]))
+
+        return result
+
+    def get_user_by_id(self, user_id: int) -> User:
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM Users WHERE id = ?', (user_id,))
+        found = cur.fetchone()
+        conn.close()
+        return User(found[0], found[1], found[2])
+
+
+"""    def get_product_by_name(self, name) -> Product:
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM Products WHERE name = ?', (name))
+        found_product = cur.fetchone()
+        conn.close()
+
+        return Product(found_product[0], found_product[1], found_product[2])"""  # Пока не требуется (и пока не работает)
+
+"""    def find_in_table_by_value_in_row(self, table_name, column_title, value) -> object:
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM ? WHERE ? = ?', (table_name, column_title, value))
+        found = cur.fetchone()
+        conn.close()
+        return found"""  # Не работают ? в SQLе (Наверное и не понадобится)
