@@ -19,26 +19,16 @@ BACK_BUTTON = "Back"
 TUTORIAL_BUTTON = "Tutorial"
 
 # Build keyboards
-FIRST_MENU_MARKUP = InlineKeyboardMarkup([[
-    InlineKeyboardButton(
-        NEXT_BUTTON, callback_data=
-        NEXT_BUTTON)
-]])
-
-SECOND_MENU_MARKUP = InlineKeyboardMarkup([
-    [InlineKeyboardButton(
-        BACK_BUTTON, callback_data=
-        BACK_BUTTON)],
-    [InlineKeyboardButton(
-        TUTORIAL_BUTTON, url="https://core.telegram.org/bots/api")]
-])
+def build_menu_keyboard():
+    buttons = []
+    return InlineKeyboardMarkup(buttons)
 
 
 class Admin:
     def __init__(self):
         pass
 
-    async def home_page(update: Update, context: CallbackContext) -> None:
+    async def menu(update: Update, context: CallbackContext) -> None:
         """
         This handler sends a menu with the inline buttons we pre-assigned above
         """
@@ -51,7 +41,7 @@ class Admin:
             reply_markup=FIRST_MENU_MARKUP
         )
 
-    async def second_page(update: Update, context: CallbackContext) -> None:
+    async def on_button_tap(update: Update, context: CallbackContext) -> None:
         """
         This handler processes the inline buttons on the menu
         """

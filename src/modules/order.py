@@ -1,16 +1,26 @@
 import datetime
+
+
+# for bot work
 from modules.product import Product
+
+# for testing database
+
+"""from product import Product"""
 
 
 class Order:
 
     def __init__(self, date, product, customer_id, barman_id, status) -> None:
         """self.id = id"""
-        self.date = date
-        self.product = product
-        self.customer_id = customer_id
-        self.barman_id = barman_id
-        self.status = status
+        self.date: str = date
+        self.product: str = product
+        self.customer_id: int = customer_id
+        self.barman_id: int = barman_id
+        self.status: str = status
+
+        if self.status not in ['placed', 'complete']:
+            raise ValueError("Invalid status type")
 
     """def get_order_id(self) -> int:
         return self.id"""

@@ -49,10 +49,10 @@ async def menu(update: Update, context: CallbackContext) -> None:
     current_user = database.get_user_by_id(tg_user.id)
 
     if current_user.type == "customer":
-        await Customer.home_page(update, context)
+        await Customer.menu(update, context)
     elif current_user.type == "barman":
-        await Barman.home_page(update, context)
+        await Barman.menu(update, context)
     elif current_user.type == "admin":
-        await Admin.home_page(update, context)
+        await Admin.menu(update, context)
     else:
         logging.getLogger(__name__).error("incorrect user type")
