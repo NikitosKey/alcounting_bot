@@ -22,6 +22,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
+
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
@@ -33,9 +34,9 @@ def main() -> None:
     application.add_handler(CommandHandler("menu", menu))
 
     # Register handler for inline buttons
-    application.add_handler(CallbackQueryHandler(Customer.second_page))
-    application.add_handler(CallbackQueryHandler(Barman.second_page))
-    application.add_handler(CallbackQueryHandler(Admin.second_page))
+    application.add_handler(CallbackQueryHandler(Customer.on_button_tap))
+    application.add_handler(CallbackQueryHandler(Barman.on_button_tap))
+    application.add_handler(CallbackQueryHandler(Admin.on_button_tap))
 
     # on non command i.e. message - echo the message on Telegram
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))

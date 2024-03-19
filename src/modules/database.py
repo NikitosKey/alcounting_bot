@@ -1,11 +1,21 @@
+import datetime
 import sqlite3
 from typing import List, Any
 
+# for work when bot running
 from modules.user import User
 from modules.product import Product
 from modules.order import Order
 
 database_path = 'data/database.db'
+
+
+# for testing database
+"""from user import User
+from product import Product
+from order import Order
+
+database_path = '../../data/database.db'"""
 
 
 class Database:
@@ -36,7 +46,7 @@ class Database:
         # --- создаём таблицу с покупками ---
         cur.execute("""
             CREATE TABLE IF NOT EXISTS Orders (
-            date INTEGER PRIMARY KEY,
+            date TEXT NOT NULL PRIMARY KEY,
             product TEXT NOT NULL,
             customer_id INTEGER,
             barman_id INTEGER,
@@ -53,8 +63,8 @@ class Database:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute("""
-            INSERT OR IGNORE INTO orders (date, product, customer_id, barman_id, status) 
-            VALUES (?, ?, ?, ?, ?, ?)""",
+            INSERT INTO orders (date, product, customer_id, barman_id, status) 
+            VALUES (?, ?, ?, ?, ?)""",
                     (order.date, order.product, order.customer_id, order.barman_id, order.status))
         conn.commit()
         conn.close()
@@ -101,13 +111,15 @@ class Database:
         conn.commit()
         conn.close()
 
-    def get_all_products(self) -> List[Product]:
+    def get_all_products(self):
         # Получение списка списков из бд
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Products')
         rows: list = cur.fetchall()
         conn.close()
+        if rows is None:
+            return None
         # Конвертирование в список Products
         result: list[Product] = []
         for row in rows:
@@ -115,13 +127,15 @@ class Database:
 
         return result
 
-    def get_all_users(self) -> List[User]:
+    def get_all_users(self):
         # Получение списка списков из бд
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Users')
         rows: list = cur.fetchall()
         conn.close()
+        if rows is None:
+            return None
         # Конвертирование в список Products
         result: list[User] = []
         for row in rows:
@@ -129,13 +143,15 @@ class Database:
 
         return result
 
-    def get_all_orders(self) -> List[Order]:
+    def get_all_orders(self):
         # Получение списка списков из бд
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Orders')
         rows: list = cur.fetchall()
         conn.close()
+        if rows is None:
+            return None
         # Конвертирование в список Products
         result: list[Order] = []
         for row in rows:
@@ -149,7 +165,44 @@ class Database:
         cur.execute('SELECT * FROM Users WHERE id = ?', (user_id,))
         found = cur.fetchone()
         conn.close()
+        if found is None:
+            return None
         return User(found[0], found[1], found[2])
+
+
+    def get_product_by_name(self, name: str) -> Product:
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM Products WHERE name = ?', (name,))
+        found = cur.fetchone()
+        if found is None:
+            return None
+        conn.close()
+        return Product(found[0], found[1], found[2])
+
+
+    def get_order_by_date(self, order_date: str) -> Order:
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Orders WHERE date = ?", (order_date,))
+        found = cur.fetchone()
+        conn.close()
+        return Order(found[0], found[1], found[2], found[3], found[4])
+
+
+    def get_orders_by_customer_id(self, id: int):
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Orders WHERE customer_id = ?", (id,))
+        rows: list = cur.fetchall()
+        conn.close()
+        if rows is None:
+            return None
+        # Конвертирование в список Products
+        result: list[Order] = []
+        for row in rows:
+            result.append(Order(row[0], row[1], row[2], row[3], row[4]))
+        return result
 
 
 """    def get_product_by_name(self, name) -> Product:
@@ -168,3 +221,9 @@ class Database:
         found = cur.fetchone()
         conn.close()
         return found"""  # Не работают ? в SQLе (Наверное и не понадобится)
+
+# tests area
+"""order = Order("qdqd", "Шот", 234124, 133, 'placed')
+db = Database()
+db.create_tables()
+db.insert_order(order)"""
