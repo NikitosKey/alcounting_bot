@@ -204,6 +204,28 @@ class Database:
             result.append(Order(row[0], row[1], row[2], row[3], row[4]))
         return result
 
+    def get_orders_queue(self):
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Orders WHERE status = ?", ("размещён",))
+        rows: list = cur.fetchall()
+        conn.close()
+        if rows is None:
+            return None
+        # Конвертирование в список Products
+        result: list[Order] = []
+        for row in rows:
+            result.append(Order(row[0], row[1], row[2], row[3], row[4]))
+        return result
+
+    def update_order(self, order: Order):
+        conn = sqlite3.connect(database_path)
+        cur = conn.cursor()
+        cur.execute("""
+            UPDATE orders SET barman_id = ?, status = ? WHERE date = ?""", (order.barman_id, order.status, order.date,))
+        conn.commit()
+        conn.close()
+
 
 """    def get_product_by_name(self, name) -> Product:
         conn = sqlite3.connect(database_path)
