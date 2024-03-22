@@ -7,7 +7,7 @@ from modules.customer import Customer
 from modules.barman import Barman
 from modules.admin import Admin
 
-from modules.general import echo, start, help_command, menu
+from modules.handlers import echo, start, help_command, menu, button_callbacks
 
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
@@ -22,7 +22,6 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
-
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
@@ -34,9 +33,7 @@ def main() -> None:
     application.add_handler(CommandHandler("menu", menu))
 
     # Register handler for inline buttons
-    application.add_handler(CallbackQueryHandler(Customer.on_button_tap))
-    application.add_handler(CallbackQueryHandler(Barman.on_button_tap))
-    application.add_handler(CallbackQueryHandler(Admin.on_button_tap))
+    application.add_handler(CallbackQueryHandler(button_callbacks))
 
     # on non command i.e. message - echo the message on Telegram
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
