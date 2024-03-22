@@ -1,4 +1,7 @@
-git venv
+venv
 .idea
 *.DS_Store
-src/bot_token.py
+qodana.yaml
+data/*
+.github/workflows/bot_launch.yml
+src/modules/__pycache__
