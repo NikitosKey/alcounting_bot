@@ -1,6 +1,3 @@
-# Покупатель (Заказывающий) может заказать коктейль из списка.
-# При заказе должно быть окно подтверждения или отмены заказа, после этого заказ попадает в очередь к бармену.
-# MVP готов, осталось навести марафет, какие-то новые фичи и функции.
 import logging
 import datetime
 
@@ -13,15 +10,9 @@ from telegram import ForceReply, Update, InlineKeyboardMarkup, InlineKeyboardBut
 from telegram.constants import ParseMode
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackContext
 
-# Тексты для меню
 
-
-
-# Создание клавиатур
-
-
-# Не могу полноценно пользоваться классом из-за асинхронного программирования. self не работает в классах с async функциями :( Обойти пытался, но наследование всё равно работает через очко, поэтому пока так.
 class Customer:
+    # Тексты для меню
     CUSTOMER_MENU_TEXT = "<b>Менюшечка</b>\n\n"
     SHOW_PRODUCTS_TEXT = "<b>Барная карта</b>\n\n Нажмите на напиток, чтобы показать подробности."
     MAKE_ORDER_TEXT = "<b>Выбор напитка</b>\n\n Нажмите на напиток, чтобы заказать"
@@ -35,15 +26,10 @@ class Customer:
     BACK_TO_MENU_BUTTON = "Вернуться в главное меню"
     BACK_BUTTON = "Назад"
 
-    def __init__(self):
-
-        pass
-
     def create_customer_menu_buttons(self):
         return [[InlineKeyboardButton(self.SHOW_PRODUCTS_BUTTON, callback_data=self.SHOW_PRODUCTS_BUTTON)],
-                   [InlineKeyboardButton(self.MAKE_ORDER_BUTTON, callback_data=self.MAKE_ORDER_BUTTON)],
-                   [InlineKeyboardButton(self.SHOW_ORDERS_BUTTON, callback_data=self.SHOW_ORDERS_BUTTON)]]
-
+                [InlineKeyboardButton(self.MAKE_ORDER_BUTTON, callback_data=self.MAKE_ORDER_BUTTON)],
+                [InlineKeyboardButton(self.SHOW_ORDERS_BUTTON, callback_data=self.SHOW_ORDERS_BUTTON)]]
 
     def build_customer_menu(self) -> InlineKeyboardMarkup:
         return InlineKeyboardMarkup(self.create_customer_menu_buttons(self))
@@ -58,6 +44,7 @@ class Customer:
                 buttons.append([button])
         else:
             logging.getLogger(__name__).info(f"No products in database")
+
         buttons.append([InlineKeyboardButton(self.BACK_TO_MENU_BUTTON, callback_data=self.BACK_TO_MENU_BUTTON)])
         return InlineKeyboardMarkup(buttons)
 
@@ -70,6 +57,7 @@ class Customer:
         buttons = [[InlineKeyboardButton("Сделать заказ", callback_data=data)],
                    [InlineKeyboardButton(self.BACK_BUTTON, callback_data=self.SHOW_PRODUCTS_BUTTON)],
                    [InlineKeyboardButton(self.BACK_TO_MENU_BUTTON, callback_data=self.BACK_TO_MENU_BUTTON)]]
+
         return InlineKeyboardMarkup(buttons)
 
     def build_make_orders_menu(self) -> InlineKeyboardMarkup:
@@ -116,7 +104,7 @@ class Customer:
                    [InlineKeyboardButton(self.BACK_TO_MENU_BUTTON, callback_data=self.BACK_TO_MENU_BUTTON)]]
         return InlineKeyboardMarkup(buttons)
 
-
+    # Обработка нажатия кнопок
     def back_to_customer_menu(self, data, tg_user_id) -> [str, InlineKeyboardMarkup]:
         text = ''
         markup = None
@@ -145,7 +133,6 @@ class Customer:
             text = self.SHOW_PRODUCTS_TEXT
             markup = self.build_show_products_menu(self)
 
-
         if data[6:] in product_names and data[:6] == "shown_":
             logging.getLogger(__name__).info(f'{tg_user_id} watch for the {data[6:]}')
             db = Database()
@@ -160,7 +147,6 @@ class Customer:
             text = self.MAKE_ORDER_TEXT
             markup = self.build_make_orders_menu(self)
 
-
         if (data[6:] in product_names and data[:6] == "chose_") or (
                 data[5:] in product_names and data[:5] == 'hown_'):
             if data[:5] == 'hown_':
@@ -169,7 +155,6 @@ class Customer:
             text = f'Выбран {data[6:]}.\nПодтвердите ваш заказ.'
             print(str("next" + data)[:10])
             markup = self.build_pre_approve_order_menu(self, str('next' + data))
-
 
         if data[10:] in product_names and (data[:10] == "nextchose_" or data[:10] == "nextshown_"):
             order = Order(str(datetime.datetime.now()), data[10:], tg_user_id, None, 'размещён')
@@ -196,11 +181,6 @@ class Customer:
             text = f'''Заказ от: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}'''
             markup = self.build_show_order_info_menu(self)
 
-
         return (text, markup)
-
-    # Обработка нажатия кнопок
-
-
 
 

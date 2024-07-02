@@ -1,4 +1,3 @@
-# общие функции, чтобы не засорять мэйн
 import logging
 
 from modules.customer import Customer
@@ -24,13 +23,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     database = Database()
     new_user = User(user.id, user.name, "customer")
     database.insert_user(new_user)
-    await update.message.reply_text('Привет! Я бот. Нажимай на кнопку "/help" для получения подсказок по командам.')
+    await update.message.reply_text('Привет! Я бот Алкоучёт, жмакай на меню команд, чтобы увидеть доступные команды.')
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /help is issued."""
     logging.getLogger(__name__).info(f'{update.message.from_user.id} use {update.message.text}')
-    await update.message.reply_text("Помощь.")
+    await update.message.reply_text("Пока не придумал, что сюда писать)")
 
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -38,7 +37,7 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # await update.message.reply_text(update.message.text)
     logging.getLogger(__name__).info(f'{update.message.from_user.id} wrote {update.message.text}')
 
-# Переписать надо как-то по-другому, чтобы классы можно было делать и наследовать
+
 async def menu(update: Update, context: CallbackContext) -> None:
     """
     This handler sends a menu with the inline buttons we pre-assigned above
@@ -64,7 +63,7 @@ async def menu(update: Update, context: CallbackContext) -> None:
             parse_mode=ParseMode.HTML,
             reply_markup=Barman.build_barman_menu(Barman)
         )
-        pass
+
     elif current_user.type == "admin":
         """await context.bot.send_message(
             update.message.from_user.id,

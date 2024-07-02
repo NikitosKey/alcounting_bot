@@ -1,6 +1,3 @@
-# Бармен имеет очередь заказов, он их принимает и отмечает выполненными.
-# Также может заказать что-то сам, либо стать заказчиком.
-# Здеся либо класс, либо просто написать логику для менюшек, какие-то функции только для бармена и прочее, прочее.
 import logging
 import datetime
 from typing import Tuple, Any
@@ -11,25 +8,19 @@ from modules.product import Product
 from modules.order import Order
 from modules.user import User
 
-
 from telegram import ForceReply, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ParseMode
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackContext
 
-# Тексты для меню
-
-
-# Тексты для кнопок
-
-
-# Создание клавиатур
-
-
+# Надо сделать нормальное наследование, потому что это какая-то залупа написана.
 class Barman(Customer):
-    QUEUE_BUTTON = "Очередь заказов"
+    # Тексты для меню
     QUEUE_TEXT = "<b>Очередь</b>"
+    # Тексты для кнопок
+    QUEUE_BUTTON = "Очередь заказов"
     COMPLETE_BUTTON = "Завершить заказ"
 
+    # Создание клавиатур
     def create_barman_buttons_menu(self):
         buttons = Customer.create_customer_menu_buttons(Customer)
         buttons.append([InlineKeyboardButton(self.QUEUE_BUTTON, callback_data=self.QUEUE_BUTTON)])
@@ -44,7 +35,8 @@ class Barman(Customer):
         buttons = []
         if my_orders is not None:
             for my_order in my_orders:
-                button = InlineKeyboardButton(f'{my_order.date[:-7]} {my_order.product}', callback_data=f'chose_{my_order.date}')
+                button = InlineKeyboardButton(f'{my_order.date[:-7]} {my_order.product}',
+                                              callback_data=f'chose_{my_order.date}')
                 buttons.append([button])
         else:
             logging.getLogger(__name__).info(f"No orders in database")
@@ -54,16 +46,18 @@ class Barman(Customer):
 
     def build_pre_complete_order_menu(self, data):
         return InlineKeyboardMarkup([[InlineKeyboardButton(self.COMPLETE_BUTTON, callback_data=data)],
-                                    [InlineKeyboardButton(Customer.BACK_BUTTON, callback_data=self.QUEUE_BUTTON)],
-                                    [InlineKeyboardButton(Customer.BACK_TO_MENU_BUTTON, callback_data=Customer.BACK_TO_MENU_BUTTON)]
-                                    ])
+                                     [InlineKeyboardButton(Customer.BACK_BUTTON, callback_data=self.QUEUE_BUTTON)],
+                                     [InlineKeyboardButton(Customer.BACK_TO_MENU_BUTTON,
+                                                           callback_data=Customer.BACK_TO_MENU_BUTTON)]
+                                     ])
 
     def build_complete_order_menu(self):
         return InlineKeyboardMarkup([
             [InlineKeyboardButton(Customer.BACK_BUTTON, callback_data=self.QUEUE_BUTTON)],
             [InlineKeyboardButton(Customer.BACK_TO_MENU_BUTTON, callback_data=Customer.BACK_TO_MENU_BUTTON)]
-            ])
+        ])
 
+    # Обработка нажатия кнопок
     def back_to_barman_menu(self, data, tg_user_id):
         text = ''
         markup = None
@@ -76,7 +70,6 @@ class Barman(Customer):
 
             return text, markup
 
-
     def on_button_tap(self, data, tg_user_id):
         text = ''
         markup = None
@@ -87,7 +80,6 @@ class Barman(Customer):
 
         my_orders: list[Order] = db.get_all_orders()
         order_dates = [str(Order.get_order_date()) for Order in my_orders]
-
 
         if data == self.QUEUE_BUTTON:
             logging.getLogger(__name__).info(
@@ -105,7 +97,7 @@ class Barman(Customer):
                 bar = User(None, None, "barman")
             text = f'''
             Заказ от: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}'''
-            markup = self.build_pre_complete_order_menu(self, str("next"+data))
+            markup = self.build_pre_complete_order_menu(self, str("next" + data))
 
         if data[10:] in order_dates and data[:10] == "nextchose_":
             db = Database()
@@ -120,10 +112,4 @@ class Barman(Customer):
             text = f'''Заказ завершён!!!\nОт: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}'''
             markup = self.build_complete_order_menu(self)
 
-
-
         return text, markup
-
-
-
-

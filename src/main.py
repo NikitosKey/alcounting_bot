@@ -1,11 +1,5 @@
-# мэйн - точка входа, в мэйне проиcходит аунтетифакция пользователя, инициализация хэндлеров...
-# пока тут просто шаблон
 import os
 import logging
-
-from modules.customer import Customer
-from modules.barman import Barman
-from modules.admin import Admin
 
 from modules.handlers import echo, start, help_command, menu, button_callbacks
 

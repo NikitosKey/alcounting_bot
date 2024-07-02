@@ -7,7 +7,7 @@ from modules.user import User
 from modules.product import Product
 from modules.order import Order
 
-database_path = 'data/database.db'
+database_path = '../data/database.db'
 
 
 # for testing database
