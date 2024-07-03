@@ -21,6 +21,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         reply_markup=ForceReply(selective=True),
     )"""
     database = Database()
+    database.create_tables()
     new_user = User(user.id, user.name, "customer")
     database.insert_user(new_user)
     await update.message.reply_text('Привет! Я бот Алкоучёт, жмакай на меню команд, чтобы увидеть доступные команды.')
