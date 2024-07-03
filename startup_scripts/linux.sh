@@ -16,4 +16,7 @@ done
 SCRIPT_PATH="$(readlink -f "${SCRIPT_PATH}")"
 SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"
 
+python3.11 -m venv ../venv
+source ../venv/bin/activate
+pip install python-telegram-bot==21.0.1
 python ${SCRIPT_DIR}/../src/main.py
