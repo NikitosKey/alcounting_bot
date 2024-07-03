@@ -1,5 +1,8 @@
 import logging
 
+from subprocess import check_output
+from subprocess import run
+
 from modules.customer import Customer
 from modules.barman import Barman
 from modules.admin import Admin
@@ -37,6 +40,17 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Echo the user message."""
     # await update.message.reply_text(update.message.text)
     logging.getLogger(__name__).info(f'{update.message.from_user.id} wrote {update.message.text}')
+    database = Database()
+    tg_user = update.effective_user
+    current_user = database.get_user_by_id(tg_user.id)
+    if current_user.type == "admin":
+        comand = (update.message.text).split(" ")
+        try:  # если команда невыполняемая - check_output выдаст exception
+            await update.message.reply_text(check_output(comand).decode())
+        except:
+            await update.message.reply_text("Invalid input")  # если команда некорректна
+
+
 
 
 async def menu(update: Update, context: CallbackContext) -> None:
@@ -66,12 +80,12 @@ async def menu(update: Update, context: CallbackContext) -> None:
         )
 
     elif current_user.type == "admin":
-        """await context.bot.send_message(
+        await context.bot.send_message(
             update.message.from_user.id,
-            CUSTOMER_MENU_TEXT,
+            Admin.ADMIN_MENU_TEXT,
             parse_mode=ParseMode.HTML,
-            reply_markup=build_customer_menu()
-        )"""
+            reply_markup=Admin.build_admin_menu(Admin)
+        )
         pass
     else:
         logging.getLogger(__name__).error("incorrect user type")
@@ -98,7 +112,9 @@ async def button_callbacks(update: Update, context: CallbackContext) -> None:
         if markup is None:
             text, markup = Barman.back_to_barman_menu(Barman, data, tg_user.id)
     elif current_user.type == "admin":
-        pass
+        text, markup = Admin.on_button_tap(Admin, data, tg_user.id)
+        if markup is None:
+             text, markup = Admin.back_to_admin_menu(Admin, data, tg_user.id)
     else:
         logging.getLogger(__name__).error("incorrect user type")
 
