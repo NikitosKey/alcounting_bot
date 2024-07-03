@@ -2,7 +2,7 @@ import os
 import logging
 import setproctitle
 
-setproctitle.setproctitle('Alcounting bot v0.0.2')
+setproctitle.setproctitle('Alcounting bot v0.1.0')
 
 from modules.handlers import echo, start, help_command, menu, button_callbacks
 
