@@ -1,3 +1,4 @@
+*/venv/
 venv
 .idea
 *.DS_Store
@@ -5,3 +6,4 @@ qodana.yaml
 data/*
 .github/workflows/bot_launch.yml
 src/modules/__pycache__
+startup_scripts/nohup.out
