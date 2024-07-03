@@ -21,4 +21,4 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install python-telegram-bot==21.0.1
 pip install setproctitle
-nohup python ${SCRIPT_DIR}/../src/main.py
+screen python ${SCRIPT_DIR}/../src/main.py
