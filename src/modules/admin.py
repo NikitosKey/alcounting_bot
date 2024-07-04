@@ -3,7 +3,6 @@
 # Назначать бармена, и прочее прочее.
 # Здеся либо класс, либо просто написать логику для менюшек, какие-то функции только для админа и прочее, прочее.
 import logging
-from tkinter import Menu
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -27,6 +26,10 @@ class Admin(Barman):
     MENU_TABLE_BUTTON = "Таблица меню."
     STATISTIC_BUTTON = "Статистика."
     USERS_TABLE_TEXT = "Таблица пользователей."
+    DELETE_ALL_BUTTON = "Удалить всё."
+    DELETE_BUTTON = "Удалить."
+    ADD_NEW_BUTTON = "Добавить запись."
+
 
     def build_admin_menu(self):
         buttons = [[InlineKeyboardButton(self.TO_CUSTOMER_MENU_BUTTON, callback_data=self.TO_CUSTOMER_MENU_BUTTON)]]
@@ -42,26 +45,29 @@ class Admin(Barman):
         buttons = []
         for user in users:
             buttons.append([InlineKeyboardButton(user.name, callback_data=user.id)])
+        buttons.append([InlineKeyboardButton(self.DELETE_ALL_BUTTON, callback_data=self.DELETE_ALL_BUTTON + '_usr')])
         buttons.append([InlineKeyboardButton(self.BACK_TO_MENU_BUTTON, callback_data=self.BACK_TO_MENU_BUTTON)])
 
         return InlineKeyboardMarkup(buttons)
 
-    def create_menu_table_buttons(self):
+    def build_menu_table_menu(self):
         db = Database()
         products = db.get_all_products()
         buttons = []
         for product in products:
             buttons.append([InlineKeyboardButton(product.name, callback_data=product.name)])
+        buttons.append([InlineKeyboardButton(self.DELETE_ALL_BUTTON, callback_data=self.DELETE_ALL_BUTTON + '_pro')])
         buttons.append([InlineKeyboardButton(self.BACK_TO_MENU_BUTTON, callback_data=self.BACK_TO_MENU_BUTTON)])
 
         return InlineKeyboardMarkup(buttons)
 
-    def create_orders_table_buttons(self, context):
+    def build_orders_table_menu(self, context):
         db = Database()
         orders = db.get_all_orders()
         buttons = []
         for order in orders:
             buttons.append([InlineKeyboardButton(order.date, callback_data=(order.date + context))])
+        buttons.append([InlineKeyboardButton(self.DELETE_ALL_BUTTON, callback_data=self.DELETE_ALL_BUTTON + '_ord')])
         buttons.append([InlineKeyboardButton(self.BACK_TO_MENU_BUTTON, callback_data=self.BACK_TO_MENU_BUTTON)])
 
         return InlineKeyboardMarkup(buttons)
@@ -125,7 +131,6 @@ class Admin(Barman):
             text = self.ORDERS_TABLE_BUTTON
             markup = self.build_orders_table_menu(self, "admin")
 
-        #
         if db.get_user_by_id(data) != None:
             logging.getLogger(__name__).info(
                 f'{tg_user_id} press the {data}'
