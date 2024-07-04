@@ -1,13 +1,12 @@
 import logging
 
 from subprocess import check_output
-from subprocess import run
 
-from modules.customer import Customer
-from modules.barman import Barman
-from modules.admin import Admin
-from modules.database import Database
-from modules.user import User
+from .customer import Customer
+from .barman import Barman
+from .admin import Admin
+from .database import Database
+from .user import User
 from telegram import ForceReply, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ParseMode
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackContext
@@ -51,8 +50,6 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await update.message.reply_text("Invalid input")  # если команда некорректна
 
 
-
-
 async def menu(update: Update, context: CallbackContext) -> None:
     """
     This handler sends a menu with the inline buttons we pre-assigned above
@@ -90,6 +87,7 @@ async def menu(update: Update, context: CallbackContext) -> None:
     else:
         logging.getLogger(__name__).error("incorrect user type")
 
+
 async def button_callbacks(update: Update, context: CallbackContext) -> None:
     """
     This handler processes the inline buttons on the menu
@@ -103,6 +101,8 @@ async def button_callbacks(update: Update, context: CallbackContext) -> None:
     text = ''
     markup = None
 
+    # Переписать под try except
+
     if current_user.type == "customer":
         text, markup = Customer.on_button_tap(Customer, data, tg_user.id)
         if markup is None:
@@ -114,7 +114,7 @@ async def button_callbacks(update: Update, context: CallbackContext) -> None:
     elif current_user.type == "admin":
         text, markup = Admin.on_button_tap(Admin, data, tg_user.id)
         if markup is None:
-             text, markup = Admin.back_to_admin_menu(Admin, data, tg_user.id)
+            text, markup = Admin.back_to_admin_menu(Admin, data, tg_user.id)
     else:
         logging.getLogger(__name__).error("incorrect user type")
 

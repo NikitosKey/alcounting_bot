@@ -1,10 +1,10 @@
 import logging
 import datetime
 
-from modules.database import Database
-from modules.product import Product
-from modules.order import Order
-from modules.user import User
+from .database import Database
+from .product import Product
+from .order import Order
+from .user import User
 
 from telegram import ForceReply, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ParseMode
@@ -182,5 +182,3 @@ class Customer:
             markup = self.build_show_order_info_menu(self)
 
         return (text, markup)
-
-

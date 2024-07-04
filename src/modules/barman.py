@@ -1,16 +1,12 @@
 import logging
-import datetime
-from typing import Tuple, Any
 
-from modules.customer import Customer
-from modules.database import Database
-from modules.product import Product
-from modules.order import Order
-from modules.user import User
+from .customer import Customer
+from .database import Database
+from .order import Order
+from .user import User
 
-from telegram import ForceReply, Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.constants import ParseMode
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackContext
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+
 
 # Надо сделать нормальное наследование, потому что это какая-то залупа написана.
 class Barman(Customer):
@@ -22,7 +18,7 @@ class Barman(Customer):
 
     # Создание клавиатур
     def create_barman_buttons_menu(self):
-        buttons = Customer.create_customer_menu_buttons(Customer)
+        buttons = Customer.create_customer_menu_buttons(self)
         buttons.append([InlineKeyboardButton(self.QUEUE_BUTTON, callback_data=self.QUEUE_BUTTON)])
         return buttons
 
@@ -78,7 +74,7 @@ class Barman(Customer):
 
         db = Database()
 
-        my_orders: list[Order] = db.get_all_orders()
+        my_orders = db.get_all_orders()
         order_dates = [str(Order.get_order_date()) for Order in my_orders]
 
         if data == self.QUEUE_BUTTON:
@@ -110,6 +106,6 @@ class Barman(Customer):
             if bar is None:
                 bar = User(None, None, "barman")
             text = f'''Заказ завершён!!!\nОт: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}'''
-            markup = self.build_complete_order_menu(self)
+            markup = self.build_complete_order_menu()
 
         return text, markup

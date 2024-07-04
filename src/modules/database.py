@@ -3,12 +3,11 @@ import sqlite3
 from typing import List, Any
 
 # for work when bot running
-from modules.user import User
-from modules.product import Product
-from modules.order import Order
+from .user import User
+from .product import Product
+from .order import Order
 
 database_path = '../data/database.db'
-
 
 # for testing database
 """from user import User
@@ -169,7 +168,6 @@ class Database:
             return None
         return User(found[0], found[1], found[2])
 
-
     def get_product_by_name(self, name: str) -> Product:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
@@ -180,7 +178,6 @@ class Database:
         conn.close()
         return Product(found[0], found[1], found[2])
 
-
     def get_order_by_date(self, order_date: str) -> Order:
         conn = sqlite3.connect(database_path)
         cur = conn.cursor()
@@ -188,7 +185,6 @@ class Database:
         found = cur.fetchone()
         conn.close()
         return Order(found[0], found[1], found[2], found[3], found[4])
-
 
     def get_orders_by_customer_id(self, id: int):
         conn = sqlite3.connect(database_path)
