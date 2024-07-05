@@ -1,2 +1,14 @@
-- name: verify conventional commits
-  uses: taskmedia/action-conventional-commits@v1.1.17
+            - name: verify conventional commits
+  # You may pin to the exact commit or the version.
+  # uses: taskmedia/action-conventional-commits@ac561a9468c9c2454544d5b195532753e198e601
+  uses: taskmedia/action-conventional-commits@v1.1.5
+  with:
+    # token to access GitHub API to receive PR commits
+    token: # optional, default is ${{ github.token }}
+    # skip merge commits
+    skip_merge: # optional, default is true
+    # skip revert commits
+    skip_revert: # optional, default is true
+    # allow different types in commit message
+    types: # optional, default is fix|feat|revert
+          
