@@ -4,6 +4,11 @@ on:
 
 jobs:
     job:
-        name: verify conventional commits
-        uses: taskmedia/action-conventional-commits@v1.1.7
+        runs-on: ubuntu-latest
+        steps:
+            - name: verify conventional commits
+              uses: taskmedia/action-conventional-commits@v1.1.5
+      
+
+          
        
