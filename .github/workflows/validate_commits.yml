@@ -7,7 +7,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: verify conventional commits
-              uses: taskmedia/action-conventional-commits@v1.1.5
+              uses: taskmedia/action-conventional-commits@v1.1.7
       
 
           
