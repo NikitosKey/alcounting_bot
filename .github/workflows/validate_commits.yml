@@ -8,7 +8,7 @@ jobs:
             - name: verify conventional commits
               uses: taskmedia/action-conventional-commits@v1.1.7
               with: 
-                  types: fix|feat|revert|chore|docs|ci|build|refactor|style|test|perf
+                  types: fix|feat|revert|chore|docs|ci|build|ref|style|test|perf
 
 
 

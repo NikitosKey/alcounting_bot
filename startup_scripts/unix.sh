@@ -21,4 +21,5 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install python-telegram-bot==21.0.1
 pip install setproctitle
-screen -dmS 'alcounting_bot' python ${SCRIPT_DIR}/../src/main.py
+cd ..
+screen -S 'alcounting_bot' python -m bot.__main__

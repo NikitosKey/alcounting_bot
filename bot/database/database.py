@@ -1,28 +1,20 @@
-import datetime
 import sqlite3
-from typing import List, Any
 
-# for work when bot running
 from .user import User
 from .product import Product
 from .order import Order
 
-database_path = '../data/database.db'
-
-# for testing database
-"""from user import User
-from product import Product
-from order import Order
-
-database_path = '../../data/database.db'"""
-
 
 class Database:
-    def __init__(self):
-        pass
+    def __init__ (self, database_file_name="database.db"):
+        database_folder = 'data/'
+        database_path = database_folder + database_file_name
+        self.database_file_name = database_file_name
+        self.database_path = database_path
+        self.database_folder = database_folder
 
     def create_tables(self) -> None:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
 
         # --- создаём таблицу с меню ---
@@ -59,7 +51,7 @@ class Database:
         conn.close()
 
     def insert_order(self, order: Order) -> None:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute("""
             INSERT INTO orders (date, product, customer_id, barman_id, status) 
@@ -69,7 +61,7 @@ class Database:
         conn.close()
 
     def insert_product(self, product: Product) -> None:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute("""
             INSERT OR IGNORE INTO products (name, description, price)
@@ -80,7 +72,7 @@ class Database:
         conn.close()
 
     def insert_user(self, user: User) -> None:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute("""
             INSERT OR IGNORE INTO  Users values (?, ?, ?)""",
@@ -90,21 +82,21 @@ class Database:
         conn.close()
 
     def delete_order(self, order: Order) -> None:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute('DELETE FROM Orders WHERE date = ?', (order.date,))
         conn.commit()
         conn.close()
 
     def delete_user(self, user: User) -> None:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute('DELETE FROM Users WHERE id = ?', (user.id,))
         conn.commit()
         conn.close()
 
     def delete_product(self, product: Product) -> None:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute('DELETE FROM Products WHERE name = ?', (product.name,))
         conn.commit()
@@ -112,7 +104,7 @@ class Database:
 
     def get_all_products(self):
         # Получение списка списков из бд
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Products')
         rows: list = cur.fetchall()
@@ -128,7 +120,7 @@ class Database:
 
     def get_all_users(self):
         # Получение списка списков из бд
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Users')
         rows: list = cur.fetchall()
@@ -144,7 +136,7 @@ class Database:
 
     def get_all_orders(self):
         # Получение списка списков из бд
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Orders')
         rows: list = cur.fetchall()
@@ -159,7 +151,7 @@ class Database:
         return result
 
     def get_user_by_id(self, user_id: int) -> User:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Users WHERE id = ?', (user_id,))
         found = cur.fetchone()
@@ -169,7 +161,7 @@ class Database:
         return User(found[0], found[1], found[2])
 
     def get_product_by_name(self, name: str) -> Product:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute('SELECT * FROM Products WHERE name = ?', (name,))
         found = cur.fetchone()
@@ -179,7 +171,7 @@ class Database:
         return Product(found[0], found[1], found[2])
 
     def get_order_by_date(self, order_date: str) -> Order:
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute("SELECT * FROM Orders WHERE date = ?", (order_date,))
         found = cur.fetchone()
@@ -187,7 +179,7 @@ class Database:
         return Order(found[0], found[1], found[2], found[3], found[4])
 
     def get_orders_by_customer_id(self, id: int):
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute("SELECT * FROM Orders WHERE customer_id = ?", (id,))
         rows: list = cur.fetchall()
@@ -201,7 +193,7 @@ class Database:
         return result
 
     def get_orders_queue(self):
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute("SELECT * FROM Orders WHERE status = ?", ("размещён",))
         rows: list = cur.fetchall()
@@ -215,7 +207,7 @@ class Database:
         return result
 
     def update_order(self, order: Order):
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(self.database_path)
         cur = conn.cursor()
         cur.execute("""
             UPDATE orders SET barman_id = ?, status = ? WHERE date = ?""", (order.barman_id, order.status, order.date,))
@@ -240,7 +232,7 @@ class Database:
         conn.close()
         return found"""  # Не работают ? в SQLе (Наверное и не понадобится)
 
-# tests area
+# tests
 """order = Order("qdqd", "Шот", 234124, 133, 'placed')
 db = Database()
 db.create_tables()

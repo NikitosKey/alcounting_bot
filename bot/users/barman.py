@@ -1,14 +1,12 @@
 import logging
 
-from .customer import Customer
-from .database import Database
-from .order import Order
-from .user import User
+from bot.users.customer import Customer
+from bot.database.database import Database
+from bot.database.user import User
 
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-# Надо сделать нормальное наследование, потому что это какая-то залупа написана.
 class Barman(Customer):
     # Тексты для меню
     QUEUE_TEXT = "<b>Очередь</b>"

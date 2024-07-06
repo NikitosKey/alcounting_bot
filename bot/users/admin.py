@@ -1,36 +1,46 @@
-# Админ может делать всё, быть барменом, либо заказчиком. 
-# Также какие-то логи возможно смотреть и прочую техническую часть. 
-# Назначать бармена, и прочее прочее.
-# Здеся либо класс, либо просто написать логику для менюшек, какие-то функции только для админа и прочее, прочее.
 import logging
 
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
-from .order import Order
-from .user import User
-from .product import Product
-from .customer import Customer
-from .barman import Barman
-from .database import Database
+from bot.users.customer import Customer
+from bot.users.barman import Barman
+from bot.database.database import Database
 
 
 class Admin(Barman):
     def __init__(self):
         pass
 
+    """
+    Text section
+    """
     ADMIN_MENU_TEXT = "Админ панель."
     TO_BARMAN_MENU_BUTTON = "В меню бармена."
     TO_CUSTOMER_MENU_BUTTON = "В меню покупателя."
     USERS_TABLE_BUTTON = "Таблица пользователей."
-    ORDERS_TABLE_BUTTON = "Таблица заказов."
     MENU_TABLE_BUTTON = "Таблица меню."
+    ORDERS_TABLE_BUTTON = "Таблица заказов."
     STATISTIC_BUTTON = "Статистика."
-    USERS_TABLE_TEXT = "Таблица пользователей."
     DELETE_ALL_BUTTON = "Удалить всё."
     DELETE_BUTTON = "Удалить."
     ADD_NEW_BUTTON = "Добавить запись."
 
+    """
+    Create buttons section
+    """
+    # admin menu buttons
 
+    # users table menu buttons
+
+    # products table menu buttons
+
+    # orders table menu buttons
+
+
+
+    """
+    Build keyboards section
+    """
     def build_admin_menu(self):
         buttons = [[InlineKeyboardButton(self.TO_CUSTOMER_MENU_BUTTON, callback_data=self.TO_CUSTOMER_MENU_BUTTON)]]
         buttons.append([InlineKeyboardButton(self.TO_BARMAN_MENU_BUTTON, callback_data=self.TO_BARMAN_MENU_BUTTON)])
@@ -50,7 +60,7 @@ class Admin(Barman):
 
         return InlineKeyboardMarkup(buttons)
 
-    def build_menu_table_menu(self):
+    def build_products_table_menu(self):
         db = Database()
         products = db.get_all_products()
         buttons = []
@@ -122,7 +132,7 @@ class Admin(Barman):
                 f'{tg_user_id} press the MENU_TABLE_BUTTON'
             )
             text = self.MENU_TABLE_BUTTON
-            markup = self.build_menu_table_menu(self)
+            markup = self.build_products_table_menu(self)
 
         if data == self.ORDERS_TABLE_BUTTON:
             logging.getLogger(__name__).info(

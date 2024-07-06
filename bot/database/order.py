@@ -1,15 +1,10 @@
 import datetime
 
-# for bot work
-from modules.product import Product
 
-# for testing database
-
-"""from product import Product"""
+from bot.database.product import Product
 
 
 class Order:
-
     def __init__(self, date, product, customer_id, barman_id, status) -> None:
         """self.id = id"""
         self.date: str = date

@@ -1,14 +1,12 @@
 import logging
 import datetime
 
-from .database import Database
-from .product import Product
-from .order import Order
-from .user import User
+from bot.database.database import Database
+from bot.database.product import Product
+from bot.database.order import Order
+from bot.database.user import User
 
-from telegram import ForceReply, Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.constants import ParseMode
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackContext
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 class Customer:
