@@ -1,8 +1,8 @@
-*/venv/
-venv
+*venv
 .idea
+*__pycache__
+logs
 *.DS_Store
 qodana.yaml
 data/*
-bot/handlers/__pycache__
-startup_scripts/nohup.out
+
