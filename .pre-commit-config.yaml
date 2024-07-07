@@ -22,3 +22,9 @@ repos:
     rev: 24.4.2
     hooks:
     -   id: black
+-   repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.2.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [--strict, --force-scope, feat, fix, chore, test, ci, build, docs, ref, style, test, perf]
