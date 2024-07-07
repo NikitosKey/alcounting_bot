@@ -1,22 +1,23 @@
+"""The start command"""
+
 import logging
 import os.path
 
 from telegram import Update
-from telegram.ext import ContextTypes
 
 from bot.database.database import Database, User
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def start(update: Update) -> None:
     """Send a message when the command /start is issued."""
     logging.getLogger(__name__).info(
-        f"{update.message.from_user.id} use {update.message.text}"
+        update.message.from_user.id, "use", update.message.text
     )
     user = update.effective_user
-    Db = Database()
+    db = Database()
 
-    if not os.path.exists(Db.database_folder):
-        os.makedirs(Db.database_path, exist_ok=True)
+    if not os.path.exists(db.database_folder):
+        os.makedirs(db.database_path, exist_ok=True)
 
     database = Database()
     database.create_tables()
