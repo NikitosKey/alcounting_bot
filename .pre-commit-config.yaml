@@ -1,30 +1,30 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-    -   id: check-added-large-files
-    -   id: check-ast
-    -   id: check-byte-order-marker
-    -   id: check-case-conflict
-    -   id: check-docstring-first
-    -   id: check-executables-have-shebangs
-    -   id: check-json
-    -   id: check-merge-conflict
-    -   id: check-toml
-    -   id: check-yaml
-    -   id: debug-statements
-#    -   id: detect-aws-credentials
-    -   id: detect-private-key
-    -   id: end-of-file-fixer
-    -   id: requirements-txt-fixer
-    -   id: trailing-whitespace
--   repo: https://github.com/psf/black
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-byte-order-marker
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+      #    -   id: detect-aws-credentials
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/psf/black
     rev: 24.4.2
     hooks:
-    -   id: black
--   repo: https://github.com/compilerla/conventional-pre-commit
+      - id: black
+  - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v3.2.0
     hooks:
       - id: conventional-pre-commit
-        stages: [commit-msg]
-        args: [--strict, --force-scope, feat, fix, chore, test, ci, build, docs, ref, style, test, perf]
+        stages: [ commit-msg ]
+        args: [ --strict, --force-scope, feat, fix, chore, test, ci, build, docs, ref, style, test, perf ]
