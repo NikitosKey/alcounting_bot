@@ -1,8 +1,8 @@
+"""Allows running bot."""
+
 import os
 import logging
 from datetime import datetime
-
-from bot.handlers import cmd, start_command, help_command, menu_command, callbacks
 
 from telegram import Update
 from telegram.ext import (
@@ -13,8 +13,11 @@ from telegram.ext import (
     CallbackQueryHandler,
 )
 
+from bot.handlers import cmd, start_command, help_command, menu_command, callbacks
+
 
 def main() -> None:
+    """Start the bot and register handlers."""
     time = datetime.now().isoformat()
     log_path = os.getcwdb().decode() + "/logs/"
     if not os.path.exists(log_path):
@@ -32,8 +35,8 @@ def main() -> None:
     # set higher logging level for httpx to avoid all GET and POST requests being logged
     logging.getLogger("httpx").setLevel(logging.WARNING)
 
-    logger = logging.getLogger(__name__)
-    """Start the bot."""
+    # logger = logging.getLogger(__name__)
+
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(os.getenv("BOT_TOKEN")).build()
 
