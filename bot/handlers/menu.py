@@ -17,7 +17,7 @@ async def menu_command(update: Update, context: CallbackContext) -> None:
     This handler sends a menu with the inline buttons we pre-assigned above
     """
     logging.getLogger(__name__).info(
-        "{} use {}".format(update.message.from_user.id, update.message.text)
+        "%s use %s", update.message.from_user.id, update.message.text
     )
 
     database = Database()

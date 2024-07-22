@@ -148,26 +148,64 @@ class Admin(Barman):
         text = ""
         markup = None
 
-        # Обработка кнопки назад в меню
-        if data == self.BACK_TO_MENU_BUTTON:
-            logging.getLogger(__name__).info(f"{tg_user_id} return to the admin_menu")
-            text = self.ADMIN_MENU_TEXT
-            markup = self.build_admin_menu(self)
+    def on_button_tap(self, data, tg_user_id) -> [str, InlineKeyboardMarkup]:
+        """
+        This handler processes the inline buttons on the menu
+        """
 
-            return text, markup
+        text = ""
+        markup = None
 
-    # def on_button_tap(self, data, tg_user_id) -> [str, InlineKeyboardMarkup]:
-    #     """
-    #     This handler processes the inline buttons on the menu
-    #     """
-    #
-    #     text = ''
-    #     markup = None
-    #
-    #     text, markup = Barman.on_button_tap(Barman, data, tg_user_id)
-    #
-    #     db = Database()
-    #
-    #
-    #
-    #     return text, markup
+        text, markup = Barman.on_button_tap(Barman, data, tg_user_id)
+
+        db = Database()
+
+        if data == self.TO_CUSTOMER_MENU_BUTTON_TEXT:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the TO_CUSTOMER_MENU_BUTTON"
+            )
+            text = self.CUSTOMER_MENU_TEXT
+            markup = self.build_customer_menu()
+
+        if data == self.TO_BARMAN_MENU_BUTTON_TEXT:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the TO_BARMAN_MENU_BUTTON"
+            )
+            text = self.CUSTOMER_MENU_TEXT
+            markup = self.build_barman_menu()
+
+        if data == self.USERS_TABLE_BUTTON_TEXT:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the USERS_TABLE_BUTTON"
+            )
+            text = self.USERS_TABLE_TEXT
+            markup = self.build_users_table_menu()
+
+        if data == self.MENU_TABLE_BUTTON_TEXT:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the MENU_TABLE_BUTTON"
+            )
+            text = self.MENU_TABLE_BUTTON_TEXT
+            markup = self.build_products_table_menu()
+
+        if data == self.ORDERS_TABLE_BUTTON_TEXT:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the ORDERS_TABLE_BUTTON"
+            )
+            text = admin.ORDERS_TABLE_BUTTON_TEXT
+            markup = admin.build_orders_table_menu("admin")
+
+            # Обработка кнопки назад в меню
+            if data == self.BACK_TO_MENU_BUTTON:
+                logging.getLogger(__name__).info(
+                    f"{tg_user_id} return to the admin_menu"
+                )
+                text = self.ADMIN_MENU_TEXT
+                markup = self.build_admin_menu(self)
+
+                return text, markup
+
+        if db.get_user_by_id(data) != None:
+            logging.getLogger(__name__).info(f"{tg_user_id} press the {data}")
+
+        return text, markup

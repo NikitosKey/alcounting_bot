@@ -96,15 +96,47 @@ class Barman(Customer):
 
             return text, markup
 
-    def on_button_tap(self, data, tg_user_id):
+    def barman_button_taps(self, data, tg_user_id):
         text = ""
         markup = None
 
-        text, markup = Customer.on_button_tap(Customer, data, tg_user_id)
+        text, markup = Customer.barman_button_taps(Customer, data, tg_user_id)
 
         db = Database()
 
         my_orders = db.get_all_orders()
         order_dates = [str(Order.get_order_date()) for Order in my_orders]
+
+        if data == self.QUEUE_BUTTON:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the QUEUE_BUTTON or return to the QUEUE menu"
+            )
+            text = f"{self.QUEUE_BUTTON}"
+            markup = self.build_queue_menu()
+
+        if data[6:] in order_dates and data[:6] == "chose_":
+            logging.getLogger(__name__).info(f"{tg_user_id} watch for the {data}")
+            db = Database()
+            order = db.get_order_by_date(data[6:])
+            user = db.get_user_by_id(order.customer_id)
+            bar = db.get_user_by_id(order.barman_id)
+            if bar is None:
+                bar = User(None, None, "barman")
+            text = f"""
+            Заказ от: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}"""
+            markup = self.build_pre_complete_order_menu(str("next" + data))
+
+        if data[10:] in order_dates and data[:10] == "nextchose_":
+            db = Database()
+            order = db.get_order_by_date(data[10:])
+            order.set_order_barman_id(tg_user_id)
+            order.set_order_status("завершён")
+            db.update_order(order)
+            user = db.get_user_by_id(order.customer_id)
+            bar = db.get_user_by_id(order.barman_id)
+            if bar is None:
+                bar = User(None, None, "barman")
+            text = f"""Заказ завершён!!!\nОт: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}"""
+            markup = barman.build_complete_order_menu()
 
         return text, markup

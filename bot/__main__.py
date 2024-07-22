@@ -13,7 +13,13 @@ from telegram.ext import (
     CallbackQueryHandler,
 )
 
-from bot.handlers import cmd, start_command, help_command, menu_command, callbacks
+from bot.handlers import (
+    cmd,
+    start_command,
+    help_command,
+    menu_command,
+    callback_handler,
+)
 
 
 def main() -> None:
@@ -46,7 +52,7 @@ def main() -> None:
     application.add_handler(CommandHandler("menu", menu_command))
 
     # Register handler for inline buttons
-    application.add_handler(CallbackQueryHandler(callbacks))
+    application.add_handler(CallbackQueryHandler(callback_handler))
 
     # on non command i.e. message - echo the message on Telegram
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, cmd))

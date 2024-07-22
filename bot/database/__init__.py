@@ -1,4 +1,6 @@
-__all__ = ['Database', 'Order', 'Product', 'User']
+"""Database module init."""
+
+__all__ = ["Database", "Order", "Product", "User"]
 
 from bot.database.order import Order
 from bot.database.product import Product

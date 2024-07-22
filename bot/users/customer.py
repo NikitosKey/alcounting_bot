@@ -26,6 +26,12 @@ class Customer:
     BACK_TO_MENU_BUTTON = "Вернуться в главное меню"
     BACK_BUTTON = "Назад"
 
+    # Колбэки
+
+    # Кнопки
+
+    # Клавиатуры
+
     def create_button(self, text, callback_data) -> InlineKeyboardButton:
         return InlineKeyboardButton(text, callback_data=callback_data)
 
@@ -202,70 +208,78 @@ class Customer:
             )
         return self.SHOW_PRODUCTS_TEXT, self.build_show_products_menu()
 
-    # def on_button_tap(self, data, tg_user_id) -> (str, InlineKeyboardMarkup):
-    #     text = ''
-    #     markup = None
-    #
-    #     db = Database()
-    #     my_products: list[Product] = db.get_all_products()
-    #     product_names = [Product.get_name() for Product in my_products]
-    #
-    #     my_orders: list[Order] = db.get_all_orders()
-    #     order_dates = [str(Order.get_order_date()) for Order in my_orders]
-    #
-    #     # Обработка кнопок Барной карты
-    #     if data == self.SHOW_PRODUCTS_BUTTON:
-    #         logging.getLogger(__name__).info(
-    #             f'{tg_user_id} press the SHOW_PRODUCTS_BUTTON or return to SHOW_PRODUCTS menu')
-    #         text = self.SHOW_PRODUCTS_TEXT
-    #         markup = self.build_show_products_menu(self)
-    #
-    #     if data[6:] in product_names and data[:6] == "shown_":
-    #         logging.getLogger(__name__).info(f'{tg_user_id} watch for the {data[6:]}')
-    #         db = Database()
-    #         product = db.get_product_by_name(data[6:])
-    #         text = f'{product.name}\nОписание:\n{product.description}\nЦена:\n{product.price}руб.'
-    #         markup = self.build_show_product_info_menu(self, str(data[1:]))
-    #
-    #     # Обработка кнопок для создания заказа
-    #     if data == self.MAKE_ORDER_BUTTON:
-    #         logging.getLogger(__name__).info(
-    #             f'{tg_user_id} press the MAKE_ORDER_BUTTON or return to MAKE_ORDER menu')
-    #         text = self.MAKE_ORDER_TEXT
-    #         markup = self.build_make_orders_menu(self)
-    #
-    #     if (data[6:] in product_names and data[:6] == "chose_") or (
-    #             data[5:] in product_names and data[:5] == 'hown_'):
-    #         if data[:5] == 'hown_':
-    #             data = 's' + data
-    #         logging.getLogger(__name__).info(f'{tg_user_id} chosen the {data}')
-    #         text = f'Выбран {data[6:]}.\nПодтвердите ваш заказ.'
-    #         print(str("next" + data)[:10])
-    #         markup = self.build_pre_approve_order_menu(self, str('next' + data))
-    #
-    #     if data[10:] in product_names and (data[:10] == "nextchose_" or data[:10] == "nextshown_"):
-    #         order = Order(str(datetime.datetime.now()), data[10:], tg_user_id, None, 'размещён')
-    #         db = Database()
-    #         db.insert_order(order)
-    #         text = f'Заказ оформлен!\nВремя заказа: {order.date[:-7]}\nПродукт:\n{order.product}\nId покупателя:\n{order.customer_id}'
-    #         markup = self.build_approve_order_menu(self, data[4:])
-    #
-    #     # Обработка кнопок просмотра заказов
-    #     if data == self.SHOW_ORDERS_BUTTON:
-    #         logging.getLogger(__name__).info(
-    #             f'{tg_user_id} press the SHOW_ORDERS_BUTTON or return to SHOW_ORDERS menu')
-    #         text = self.SHOW_ORDERS_TEXT
-    #         markup = self.build_show_orders_menu(self, tg_user_id)
-    #
-    #     if data[6:] in order_dates and data[:6] == "shown_":
-    #         logging.getLogger(__name__).info(f'{tg_user_id} watch for the {data}')
-    #         db = Database()
-    #         order = db.get_order_by_date(data[6:])
-    #         user = db.get_user_by_id(order.customer_id)
-    #         bar = db.get_user_by_id(order.barman_id)
-    #         if bar is None:
-    #             bar = User(None, None, "barman")
-    #         text = f'''Заказ от: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}'''
-    #         markup = self.build_show_order_info_menu(self)
-    #
-    #     return text, markup
+    def barman_button_taps(self, data, tg_user_id) -> (str, InlineKeyboardMarkup):
+        text = ""
+        markup = None
+
+        db = Database()
+        my_products: list[Product] = db.get_all_products()
+        product_names = [Product.get_name() for Product in my_products]
+
+        my_orders: list[Order] = db.get_all_orders()
+        order_dates = [str(Order.get_order_date()) for Order in my_orders]
+
+        # Обработка кнопок Барной карты
+        if data == self.SHOW_PRODUCTS_BUTTON:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the SHOW_PRODUCTS_BUTTON or return to SHOW_PRODUCTS menu"
+            )
+            text = self.SHOW_PRODUCTS_TEXT
+            markup = self.build_show_products_menu(self)
+
+        if data[6:] in product_names and data[:6] == "shown_":
+            logging.getLogger(__name__).info(f"{tg_user_id} watch for the {data[6:]}")
+            db = Database()
+            product = db.get_product_by_name(data[6:])
+            text = f"{product.name}\nОписание:\n{product.description}\nЦена:\n{product.price}руб."
+            markup = self.build_show_product_info_menu(self, str(data[1:]))
+
+        # Обработка кнопок для создания заказа
+        if data == self.MAKE_ORDER_BUTTON:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the MAKE_ORDER_BUTTON or return to MAKE_ORDER menu"
+            )
+            text = self.MAKE_ORDER_TEXT
+            markup = self.build_make_orders_menu(self)
+
+        if (data[6:] in product_names and data[:6] == "chose_") or (
+            data[5:] in product_names and data[:5] == "hown_"
+        ):
+            if data[:5] == "hown_":
+                data = "s" + data
+            logging.getLogger(__name__).info(f"{tg_user_id} chosen the {data}")
+            text = f"Выбран {data[6:]}.\nПодтвердите ваш заказ."
+            print(str("next" + data)[:10])
+            markup = self.build_pre_approve_order_menu(self, str("next" + data))
+
+        if data[10:] in product_names and (
+            data[:10] == "nextchose_" or data[:10] == "nextshown_"
+        ):
+            order = Order(
+                str(datetime.datetime.now()), data[10:], tg_user_id, None, "размещён"
+            )
+            db = Database()
+            db.insert_order(order)
+            text = f"Заказ оформлен!\nВремя заказа: {order.date[:-7]}\nПродукт:\n{order.product}\nId покупателя:\n{order.customer_id}"
+            markup = self.build_approve_order_menu(self, data[4:])
+
+        # Обработка кнопок просмотра заказов
+        if data == self.SHOW_ORDERS_BUTTON:
+            logging.getLogger(__name__).info(
+                f"{tg_user_id} press the SHOW_ORDERS_BUTTON or return to SHOW_ORDERS menu"
+            )
+            text = self.SHOW_ORDERS_TEXT
+            markup = self.build_show_orders_menu(self, tg_user_id)
+
+        if data[6:] in order_dates and data[:6] == "shown_":
+            logging.getLogger(__name__).info(f"{tg_user_id} watch for the {data}")
+            db = Database()
+            order = db.get_order_by_date(data[6:])
+            user = db.get_user_by_id(order.customer_id)
+            bar = db.get_user_by_id(order.barman_id)
+            if bar is None:
+                bar = User(None, None, "barman")
+            text = f"""Заказ от: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}"""
+            markup = self.build_show_order_info_menu(self)
+
+        return text, markup
