@@ -137,6 +137,6 @@ class Barman(Customer):
             if bar is None:
                 bar = User(None, None, "barman")
             text = f"""Заказ завершён!!!\nОт: {order.date[:-7]}\nПродукт: {order.product}\nИмя покупателя: {user.name}\nИмя бармена: {bar.name}\nСтатус: {order.status}"""
-            markup = barman.build_complete_order_menu()
+            markup = self.build_complete_order_menu()
 
         return text, markup

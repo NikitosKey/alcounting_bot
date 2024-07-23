@@ -13,22 +13,16 @@ from telegram.ext import (
     CallbackQueryHandler,
 )
 
-from bot.handlers import (
-    cmd,
-    start_command,
-    help_command,
-    menu_command,
-    callback_handler,
-)
+from bot.handlers import register_handlers
 
 
 def main() -> None:
     """Start the bot and register handlers."""
+    # Enable logging
     time = datetime.now().isoformat()
     log_path = os.getcwdb().decode() + "/logs/"
     if not os.path.exists(log_path):
         os.makedirs(log_path, exist_ok=True)
-    # Enable logging
 
     logging.basicConfig(
         handlers=(
@@ -46,16 +40,7 @@ def main() -> None:
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(os.getenv("BOT_TOKEN")).build()
 
-    # on different commands - answer in Telegram
-    application.add_handler(CommandHandler("start", start_command))
-    application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(CommandHandler("menu", menu_command))
-
-    # Register handler for inline buttons
-    application.add_handler(CallbackQueryHandler(callback_handler))
-
-    # on non command i.e. message - echo the message on Telegram
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, cmd))
+    register_handlers(application)
 
     # Run the bot until the user presses Ctrl-C
     application.run_polling(allowed_updates=Update.ALL_TYPES)
