@@ -15,7 +15,7 @@ pytest = "^8.3.1"
 pytest-asyncio = "^0.23.8"
 commitizen = "^3.28.0"
 pylint = "^3.2.6"
-
+flake8 = "^7.1.0"
 
 [build-system]
 requires = ["poetry-core"]
