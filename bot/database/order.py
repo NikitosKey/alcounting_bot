@@ -13,7 +13,7 @@ class Order:
         self.barman_id: int = barman_id
         self.status: str = status
 
-        if self.status not in ['размещён', 'завершён']:
+        if self.status not in ["размещён", "завершён"]:
             raise ValueError("Invalid status type")
 
     """def get_order_id(self) -> int:
@@ -40,7 +40,7 @@ class Order:
     def set_order_customer_id(self, val) -> None:
         self.customer_id = val
 
-    def get_order_product(self, val) -> None:
+    def set_order_product(self, val) -> None:
         self.product = val
 
     def set_order_date(self, val) -> None:
