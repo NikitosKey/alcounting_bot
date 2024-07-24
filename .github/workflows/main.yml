@@ -1,0 +1,61 @@
+name: Python poetry package
+
+on:
+  push:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Cache Poetry
+      id: cache-poetry
+      uses: actions/cache@v2.1.5
+      with:
+        path: ~/.poetry
+        key: ${{ matrix.os }}-poetry
+    - name: Install latest version of Poetry
+      if: steps.cache-poetry.outputs.cache-hit != 'true'
+      run: |
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    - name: Add Poetry to $PATH
+      run: |
+        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+    - name: Get Poetry version
+      run: poetry --version
+    - name: Check pyproject.toml validity
+      run: poetry check --no-interaction
+    - name: Cache dependencies
+      id: cache-deps
+      uses: actions/cache@v2.1.5
+      with:
+        path: ${{github.workspace}}/.venv
+        key: ${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: ${{ matrix.os }}-
+    - name: Install deps
+      if: steps.cache-deps.cache-hit != 'true'
+      run: |
+        poetry config virtualenvs.in-project true
+        poetry install --no-interaction
+    - name: Analysing the code with pylint
+      run: |
+        pylint bot
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    #- name: Test with pytest
+      #run: |
+        #poetry run pytest -v
