@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "alcounting-bot"
+version = "0.1.0"
+description = "A python telegram bot that helps to host parties."
+authors = ["nikitamorozov <nikitwww@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+python-telegram-bot = "^21.4"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.1"
+pytest-asyncio = "^0.23.8"
+commitizen = "^3.28.0"
+pylint = "^3.2.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.commitizen]
+version_files = [
+    "pyproject.toml:^version"
+]
