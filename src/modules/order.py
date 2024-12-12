@@ -25,7 +25,7 @@ class Order:
     """def get_order_id(self) -> int:
         return self.id"""
 
-    def get_order_customer_id(self) -> str:
+    def get_order_customer_id(self) -> int:
         return self.customer_id
 
     def get_order_product(self) -> Product:
