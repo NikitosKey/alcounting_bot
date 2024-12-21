@@ -40,8 +40,6 @@ Save this token as you will need it to configure your bot in the next steps.
 > **Note:** The token is sensitive information and should not be shared publicly.
 #### Step 2: Set Up the Bot
 First, you need to get repository on your local machine. You can do it by cloning the repository or downloading the zip file.
-##### Local Installation Native Method
-
 ```shell
 # Clone the repository
 
@@ -49,8 +47,14 @@ First, you need to get repository on your local machine. You can do it by clonin
 # Install Git from https://git-scm.com/downloads if you haven't already.
 git clone git@github.com:NikitosKey/alcounting_bot.git
 cd alcounting_bot
+```
+And get a token from the `@BotFather` in Telegram.
 
+TODO: Add the instruction how to get the token.
 
+##### Local Installation Native Method
+
+```shell
 # Install Python 3.13 if you haven't already.
 # Visit https://www.python.org/downloads/ to download the latest version of Python.
 # Or use your package manager to install it:
@@ -93,7 +97,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Create an environment variable BOT_TOKEN and set it to your bot's token.
-# You can get the token from @BotFather on Telegram.
 export BOT_TOKEN=your_token
 
 # Run the bot
@@ -114,10 +117,10 @@ That's it!
 The bot will now run in the background, processing user requests.  
 To stop the bot, press `Ctrl+C`.
 
-TODO: Add the Docker installation method instructions.
-##### Local Installation Docker Method
+##### Local Installation Docker-Compose Method
 ```shell
-
+# Install Docker and Docker Compose from https://docs.docker.com/get-docker/ and https://docs.docker.com/compose/install/ if you haven't already.
+docker-compose up --build
 ```
 
 > To host the bot remotely instead of running it locally, you'll need to set up a hosting environment.
